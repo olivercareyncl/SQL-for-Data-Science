@@ -1,0 +1,158 @@
+Modifying and Analyzing Data with SQL - Week 4 Coding Quiz
+
+1. Pull a list of customer ids with the customer’s full name, and address, along with combining their city and country together.
+Be sure to make a space in between these two and make it UPPER CASE. (e.g. LOS ANGELES USA)
+
+SELECT CustomerId,
+       FirstName,
+       LastName,
+       Address,
+       City,
+       Country 
+FROM Customers 
+WHERE CustomerId = 16;
+
++------------+-----------+----------+---------------------------+---------------+---------+
+| CustomerId | FirstName | LastName | Address                   | City          | Country |
++------------+-----------+----------+---------------------------+---------------+---------+
+|         16 | Frank     | Harris   | 1600 Amphitheatre Parkway | Mountain View | USA     |
++------------+-----------+----------+---------------------------+---------------+---------+
+
+2. Create a new employee user id by combining the first 4 letters of the employee’s first name with the first 2 letters of the employee’s last name. 
+Make the new field lower case and pull each individual step to show your work.
+
+SELECT c.FirstName, 
+       substr(c.FirstName, 1, 4) as FirstNameNew,
+       c.LastName, 
+       substr(c.LastName, 1, 2) as LastNameNew, 
+LOWER(substr(c.FirstName, 1, 4) || substr(c.LastName,1,2)) 
+    AS NewUserID 
+    FROM Customers c;
+    
++-----------+--------------+-------------+-------------+-----------+
+| FirstName | FirstNameNew | LastName    | LastNameNew | NewUserID |
++-----------+--------------+-------------+-------------+-----------+
+| Luís      | Luís         | Gonçalves   | Go          | luísgo    |
+| Leonie    | Leon         | Köhler      | Kö          | leonkö    |
+| François  | Fran         | Tremblay    | Tr          | frantr    |
+| Bjørn     | Bjør         | Hansen      | Ha          | bjørha    |
+| František | Fran         | Wichterlová | Wi          | franwi    |
+| Helena    | Hele         | Holý        | Ho          | heleho    |
+| Astrid    | Astr         | Gruber      | Gr          | astrgr    |
+| Daan      | Daan         | Peeters     | Pe          | daanpe    |
+| Kara      | Kara         | Nielsen     | Ni          | karani    |
+| Eduardo   | Edua         | Martins     | Ma          | eduama    |
+| Alexandre | Alex         | Rocha       | Ro          | alexro    |
+| Roberto   | Robe         | Almeida     | Al          | robeal    |
+| Fernanda  | Fern         | Ramos       | Ra          | fernra    |
+| Mark      | Mark         | Philips     | Ph          | markph    |
+| Jennifer  | Jenn         | Peterson    | Pe          | jennpe    |
+| Frank     | Fran         | Harris      | Ha          | franha    |
+| Jack      | Jack         | Smith       | Sm          | jacksm    |
+| Michelle  | Mich         | Brooks      | Br          | michbr    |
+| Tim       | Tim          | Goyer       | Go          | timgo     |
+| Dan       | Dan          | Miller      | Mi          | danmi     |
+| Kathy     | Kath         | Chase       | Ch          | kathch    |
+| Heather   | Heat         | Leacock     | Le          | heatle    |
+| John      | John         | Gordon      | Go          | johngo    |
+| Frank     | Fran         | Ralston     | Ra          | franra    |
+| Victor    | Vict         | Stevens     | St          | victst    |
++-----------+--------------+-------------+-------------+-----------+
+(Output limit exceeded, 25 of 59 total rows shown)
+
+3. Show a list of employees who have worked for the company for 15 or more years using the current date function. Sort by lastname ascending.
+
+SELECT e.LastName,
+       e.FirstName,
+       e.BirthDate,
+       DATE('now') - e.HireDate as Employment_Time
+FROM Employees e 
+WHERE Employment_Time >= 15 
+ORDER BY e.LastName ASC;
+
++----------+-----------+---------------------+-----------------+
+| LastName | FirstName | BirthDate           | Employment_Time |
++----------+-----------+---------------------+-----------------+
+| Adams    | Andrew    | 1962-02-18 00:00:00 |              21 |
+| Callahan | Laura     | 1968-01-09 00:00:00 |              19 |
+| Edwards  | Nancy     | 1958-12-08 00:00:00 |              21 |
+| Johnson  | Steve     | 1965-03-03 00:00:00 |              20 |
+| King     | Robert    | 1970-05-29 00:00:00 |              19 |
+| Mitchell | Michael   | 1973-07-01 00:00:00 |              20 |
+| Park     | Margaret  | 1947-09-19 00:00:00 |              20 |
+| Peacock  | Jane      | 1973-08-29 00:00:00 |              21 |
++----------+-----------+---------------------+-----------------+
+
+4. Profiling the Customers table, are there any columns with null values? 
+
+SELECT * 
+FROM Customers c 
+WHERE c.Company IS NULL;
+
+5. Find the cities with the most customers and rank in descending order.
+
++---------------+---------------------+
+| City          | COUNT(c.CustomerId) |
++---------------+---------------------+
+| Berlin        |                   2 |
+| London        |                   2 |
+| Mountain View |                   2 |
+| Paris         |                   2 |
+| Prague        |                   2 |
+| São Paulo     |                   2 |
+| Amsterdam     |                   1 |
+| Bangalore     |                   1 |
+| Bordeaux      |                   1 |
+| Boston        |                   1 |
+| Brasília      |                   1 |
+| Brussels      |                   1 |
+| Budapest      |                   1 |
+| Buenos Aires  |                   1 |
+| Chicago       |                   1 |
+| Copenhagen    |                   1 |
+| Cupertino     |                   1 |
+| Delhi         |                   1 |
+| Dijon         |                   1 |
+| Dublin        |                   1 |
+| Edinburgh     |                   1 |
+| Edmonton      |                   1 |
+| Fort Worth    |                   1 |
+| Frankfurt     |                   1 |
+| Halifax       |                   1 |
++---------------+---------------------+
+(Output limit exceeded, 25 of 53 total rows shown)
+
+6. Create a new customer invoice id by combining a customer’s invoice id with 
+their first and last name while ordering your query in the following order: firstname, lastname, and invoiceID.
+
++-------------------+
+| NewInvoiceId      |
++-------------------+
+| AaronMitchell50   |
+| AaronMitchell61   |
+| AaronMitchell116  |
+| AaronMitchell245  |
+| AaronMitchell268  |
+| AaronMitchell290  |
+| AaronMitchell342  |
+| AlexandreRocha57  |
+| AlexandreRocha68  |
+| AlexandreRocha123 |
+| AlexandreRocha252 |
+| AlexandreRocha275 |
+| AlexandreRocha297 |
+| AlexandreRocha349 |
+| AstridGruber78    |
+| AstridGruber89    |
+| AstridGruber144   |
+| AstridGruber273   |
+| AstridGruber296   |
+| AstridGruber318   |
+| AstridGruber370   |
+| BjørnHansen2      |
+| BjørnHansen24     |
+| BjørnHansen76     |
+| BjørnHansen197    |
++-------------------+
+(Output limit exceeded, 25 of 412 total rows shown)
+
